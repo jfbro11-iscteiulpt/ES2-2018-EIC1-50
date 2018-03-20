@@ -10,6 +10,8 @@ import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
+
+//CRIADO APENAS PARA CRIAR A FRAME CORRESPONDENTE AO POPUP DA FAQ
 public class Faq extends JFrame {
 
 	private JPanel contentPane;
@@ -34,7 +36,7 @@ public class Faq extends JFrame {
 	 * Create the frame.
 	 */
 	public Faq() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 745, 505);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -42,8 +44,8 @@ public class Faq extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon(Faq.class.getResource("/images/faq.png")));
-		lblNewLabel.setBounds(0, -22, 745, 505);
+		lblNewLabel.setIcon(new ImageIcon(Faq.class.getResource("/images/fa2.png")));
+		lblNewLabel.setBounds(0, -22, 758, 505);
 		contentPane.add(lblNewLabel);
 	}
 
