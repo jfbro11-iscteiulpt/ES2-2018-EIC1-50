@@ -15,6 +15,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import java.awt.FlowLayout;
@@ -38,6 +39,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileWriter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
@@ -203,10 +206,22 @@ public class gui extends JFrame {
 		JMenu file = new JMenu("File");
 		menuBar_1.add(file);
 
-		JMenuItem open = new JMenuItem("Open...");
+		// CODIGO REFERENTE AO OPEN
+		final JMenuItem open = new JMenuItem("Open...");
+		open.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				open();
+				}
+			}
+		);
 		file.add(open);
 
-		JMenuItem saveas = new JMenuItem("Save as...");
+		final JMenuItem saveas = new JMenuItem("Save as...");
+		saveas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		});
 		file.add(saveas);
 
 		JMenu help = new JMenu("Help");
@@ -221,19 +236,13 @@ public class gui extends JFrame {
 		});
 		help.add(faq);
 
-		JMenuItem emailhelp = new JMenuItem("E-mail for help...");
+		final JMenuItem emailhelp = new JMenuItem("E-mail for help...");
 		help.add(emailhelp);
-		
+
 		JLabel background = new JLabel("New label");
 		background.setIcon(new ImageIcon(gui.class.getResource("/images/background.png")));
 		background.setBounds(0, -50, 990, 620);
 		contentPane.add(background);
-
-		// CODIGO REFERENTE A QUANDO O USER CLICA EM HELP --> SEND MAIL
-		
-		final JFrame parent = new JFrame();
-		parent.pack();
-		parent.setVisible(false);
 
 		final JPanel panel = new JPanel(new BorderLayout(5, 5));
 		JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
@@ -251,11 +260,13 @@ public class gui extends JFrame {
 		final JTextField description = new JTextField();
 		controls.add(description);
 		panel.add(controls, BorderLayout.CENTER);
-
+		
+		
+		//CODIGO REFERENTE AO ENVIO DO MAIL DE HELP
 		emailhelp.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				UIManager.put("OptionPane.minimumSize", new Dimension(400, 200));
-				int OKclick = JOptionPane.showOptionDialog(parent, panel, "Authentication", JOptionPane.DEFAULT_OPTION,
+				int OKclick = JOptionPane.showOptionDialog(emailhelp, panel, "Authentication", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE, null, null, null);
 				while (true) {
 					if (OKclick == 0) {
@@ -272,12 +283,37 @@ public class gui extends JFrame {
 		// CÓDIGO REFERENTE AO ENVIO DE MAIL QUANDO SUBMIT
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//AQUI
+				// AQUI
 			}
 		});
 	}
 
-	// PARTE DO CÓDIGO REFERENTE AO ENVIO DE MENSAGEM AO SUPORTE
+		// CODIGO REFERENTE AO SAVE AS
+	public void save() {
+		String sb = "TEST CONTENT"; // meter aqui a info dos campos
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File("/home/me/Documents"));
+		int retrival = chooser.showSaveDialog(null);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try {
+				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".xml");
+				fw.write(sb);
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	public void open(){
+		JFileChooser chooser = new JFileChooser();
+		if (chooser.showOpenDialog(chooser) == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			System.out.println(file.getName());
+			// codigo para carregar a info para os campos
+	}
+	}
+
+		//CÓDIGO REFERENTE AO ENVIO DE MENSAGEM AO SUPORTE
 	public void sendSupportMail(String userName, String passWord, String descriptiontext) {
 		try {
 			String host = "smtp.gmail.com";
@@ -310,6 +346,7 @@ public class gui extends JFrame {
 			Transport transport = mailSession.getTransport("smtp");
 			transport.connect(host, user, pass);
 			transport.sendMessage(msg, msg.getAllRecipients());
+			System.out.println("sent!");
 			transport.close();
 			JOptionPane.showMessageDialog(null, "Message sent successfuly!", "Success", JOptionPane.NO_OPTION);
 		} catch (Exception ex) {
@@ -317,16 +354,16 @@ public class gui extends JFrame {
 		}
 	}
 
-	// PARTE DO CÓDIGO REFERENTE AO ENVIO DE MENSAGEM AO SUPORTE
+		//CÓDIGO REFERENTE AO SUMBIT
 	public void sendSubmitMail(String userName, String passWord, String descriptiontext) {
 		try {
 			String host = "smtp.gmail.com";
 			String user = userName;
 			String pass = passWord;
-			String to = "jfbromao97@gmail.com";
+			String to = "jpmrd1@iscte-iul.com";
 			String from = userName;
-			String subject = "Help with software.";
-			String messageText = descriptiontext;
+			String subject = "TITULO"; //METER AQUI O TITULO COMO ESTA PEDIDO NO PROJETO
+			String messageText = descriptiontext; //SAME OF ABOVE
 			boolean sessionDebug = false;
 
 			Properties props = System.getProperties();
