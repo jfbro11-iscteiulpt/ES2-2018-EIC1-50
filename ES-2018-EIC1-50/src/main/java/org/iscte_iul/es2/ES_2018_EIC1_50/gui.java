@@ -43,13 +43,27 @@ import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import java.awt.Font;
+import javax.swing.JSlider;
+import javax.swing.border.BevelBorder;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.AbstractListModel;
+import javax.swing.JLayeredPane;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class gui extends JFrame {
 
-	private JPanel contentPane;
+	private JLayeredPane contentPane;
 	private volatile JTextField nomeproblema;
 	private volatile JTextField descricao;
 	private volatile JTextField mail;
+	private JTextField txtTypeTheAmmount;
+	private JTextField txtGroupName;
+	private JTextField txtVariableName;
 
 	/**
 	 * Launch the application.
@@ -63,12 +77,76 @@ public class gui extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(gui.class.getResource("/images/background.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 745, 505);
-		contentPane = new JPanel();
+		contentPane = new JLayeredPane();
 		contentPane.setBackground(new Color(255, 222, 173));
 		contentPane.setForeground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		txtTypeTheAmmount = new JTextField();
+		txtTypeTheAmmount.setBounds(318, 311, 73, 26);
+		contentPane.add(txtTypeTheAmmount);
+		txtTypeTheAmmount.setColumns(10);
+		
+		final JScrollPane scrollpanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollpanel.setBounds(448, 83, 291, 366);
+		scrollpanel.setOpaque(false);
+		scrollpanel.setBorder(null);
+		contentPane.add(scrollpanel);
+		
+		
+		final JPanel panel_1 = new JPanel();
+		panel_1.setBorder(null);
+		scrollpanel.setViewportView(panel_1);
+		panel_1.setLayout(null);
+		panel_1.setOpaque(false);
+		
+		
+		txtGroupName = new JTextField();
+		txtGroupName.setText("Group name");
+		txtGroupName.setBounds(70, 6, 130, 23);
+		panel_1.add(txtGroupName);
+		txtGroupName.setColumns(10);	
+		
+		scrollpanel.setVisible(false);
+		scrollpanel.getViewport().setOpaque(false);
+		
+		JButton btnNewButton = new JButton("Ok");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtTypeTheAmmount.setEditable(false);
+				int ammount = Integer.valueOf(txtTypeTheAmmount.getText());
+				JTextField txtVariableName[] = new JTextField[ammount];
+				JComboBox jmetaltype[] = new JComboBox[ammount];
+				int aux = 0;
+				for(int i = 0; i<ammount; i++){
+					txtVariableName[i] = new JTextField();
+					txtVariableName[i].setText("Variable name");
+					txtVariableName[i].setBounds(6, 41 + aux, 106, 26);
+					
+					jmetaltype[i] = new JComboBox();
+					jmetaltype[i].setModel(new DefaultComboBoxModel(new String[] {"inteiro", "binário", "decimal"}));
+					jmetaltype[i].setToolTipText("");
+					jmetaltype[i].setBounds(115, 41 + aux, 80, 27);
+					
+					aux = aux +30;
+					panel_1.add(txtVariableName[i]);
+					panel_1.add(jmetaltype[i]);
+					txtVariableName[i].setColumns(10);
+				}
+				panel_1.setPreferredSize(new Dimension(290, 40 + aux));
+				scrollpanel.setVisible(true);
+			}
+		});
+		btnNewButton.setBounds(385, 314, 46, 23);
+		contentPane.add(btnNewButton);
+		
+		
+		JLabel lblAmmountOfProblem = new JLabel("Ammount of problem decision variables:");
+		lblAmmountOfProblem.setForeground(Color.WHITE);
+		lblAmmountOfProblem.setBounds(56, 316, 260, 16);
+		contentPane.add(lblAmmountOfProblem);
 
 		JLabel lblNewLabel = new JLabel("Problem: ");
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
@@ -76,6 +154,11 @@ public class gui extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(47, 116, 88, 23);
 		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Time willing to wait:");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setBounds(56, 270, 135, 16);
+		contentPane.add(lblNewLabel_1);
 
 		nomeproblema = new JTextField();
 		nomeproblema.setHorizontalAlignment(SwingConstants.CENTER);
@@ -102,8 +185,14 @@ public class gui extends JFrame {
 		contentPane.add(mail);
 
 		JButton submit = new JButton("Submit");
-		submit.setBounds(382, 282, 117, 29);
+		submit.setBounds(628, 448, 117, 29);
 		contentPane.add(submit);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"5", "10", "15", "20", "30", "45", "60"}));
+		comboBox.setToolTipText("");
+		comboBox.setBounds(203, 266, 63, 27);
+		contentPane.add(comboBox);
 
 		JMenuBar menuBar_1 = new JMenuBar();
 		menuBar_1.setBorderPainted(false);
@@ -194,7 +283,7 @@ public class gui extends JFrame {
 			String host = "smtp.gmail.com";
 			String user = userName;
 			String pass = passWord;
-			String to = "mlcro@iscte-iul.pt";
+			String to = "jfbromao97@gmail.com";
 			String from = userName;
 			String subject = "Help with software.";
 			String messageText = descriptiontext;
