@@ -44,7 +44,7 @@ public class Faq extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon(Faq.class.getResource("/images/fa2.png")));
+		lblNewLabel.setIcon(new ImageIcon(Faq.class.getResource("/images/faq.png")));
 		lblNewLabel.setBounds(0, -22, 758, 505);
 		contentPane.add(lblNewLabel);
 	}
