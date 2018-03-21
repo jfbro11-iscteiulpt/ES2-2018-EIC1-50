@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 
@@ -53,6 +54,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -298,7 +301,7 @@ public class GUI extends JFrame {
 		// CÓDIGO REFERENTE AO ENVIO DE MAIL QUANDO SUBMIT
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// AQUI
+				sendMailAfterOptimizing();
 			}
 		});
 	}
@@ -410,8 +413,25 @@ public class GUI extends JFrame {
 	//codigo referente ao save de um xml
 	
 	public void CreateXML(File file){
-		  xmlClasses xmlclasses = new xmlClasses();
-		  xmlclasses.createXML(this, file);
+		try {
+			xmlClasses xmlclasses = new xmlClasses();
+			Document document= xmlClasses.createXML(this);
+			xmlClasses.saveXML(document, file);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void CreateXMLhere(){
+		try {
+			xmlClasses xmlclasses = new xmlClasses();
+			Document document= xmlClasses.createXML(this);
+			xmlClasses.saveXMLhere(document);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String getTitle(){
@@ -427,7 +447,7 @@ public class GUI extends JFrame {
 			String pass = "8errofatal";
 			String to = "nuclearrrrr@gmail.com";
 			String from = mail.getText();
-			String time = ZonedDateTime.now().toString();
+			String time = LocalDateTime.now().toString();
 			String subject = "Otimização em curso: " + nomeproblema.getText() + " " + time; // METER AQUI O TITULO COMO
 																							// ESTA PEDIDO NO PROJETO
 			String messageText = "Muito obrigado por usar esta plataforma de otimização. Será informado por email sobre o progresso do processo de otimização, quando o processo de otimização tiver atingido 25%, 50%,75% do total do (número de avaliações ou) tempo estimado, e também quando o processo estiver terminado, com sucesso ou devido à ocorrência de erros.";
@@ -458,10 +478,11 @@ public class GUI extends JFrame {
 			
 			
 			//ENVIAR XML POR MAIL
-			File file = new File("pom.xml"); 
+			CreateXMLhere();
+			File file = new File("problems.xml"); 
 			DataSource source = new FileDataSource(file.getAbsolutePath());
 			attachmentBodyPart.setDataHandler(new DataHandler(source));
-			attachmentBodyPart.setFileName("pom"); // ex : "test.pdf"
+			attachmentBodyPart.setFileName("problems.xml"); // ex : "test.pdf"
 
 			//multipart.addBodyPart(textBodyPart); // add the text part
 			multipart.addBodyPart(attachmentBodyPart); // add the attachement part

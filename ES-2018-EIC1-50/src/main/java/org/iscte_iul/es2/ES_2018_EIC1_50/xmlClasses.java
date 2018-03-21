@@ -9,13 +9,14 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class xmlClasses {
 	
-	public void createXML(GUI gui, File file){
-		try{
+	public static Document createXML(GUI gui) throws ParserConfigurationException{
 			 DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 	         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 	         Document xmlDoc = docBuilder.newDocument();
@@ -40,17 +41,40 @@ public class xmlClasses {
 	        	 variables.setAttribute("VariableType" + i, String.valueOf(gui.jmetaltype[i].getSelectedItem()));
 	         }
 	         
-	         OutputFormat outFormat = new OutputFormat(xmlDoc);
+	         return xmlDoc;
+	}
+		
+		public static void saveXML(Document document, File file){
+			try {
+			OutputFormat outFormat = new OutputFormat(document);
 	         outFormat.setIndenting(true);
 	         
 	         File xmlFile = new File(file + "problems.xml");
 	         FileOutputStream outStream = new FileOutputStream(xmlFile);
 	         
 	         XMLSerializer serializer = new XMLSerializer(outStream, outFormat);
-	         serializer.serialize(xmlDoc);
+				serializer.serialize(document);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public static void saveXMLhere(Document document){
+			try {
+			OutputFormat outFormat = new OutputFormat(document);
+	         outFormat.setIndenting(true);
 	         
+	         File xmlFile = new File("problems.xml");
+	         FileOutputStream outStream = new FileOutputStream(xmlFile);
 	         
-		  } catch (Exception e) { e.printStackTrace(); }
-	}
+	         XMLSerializer serializer = new XMLSerializer(outStream, outFormat);
+				serializer.serialize(document);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 
 }
