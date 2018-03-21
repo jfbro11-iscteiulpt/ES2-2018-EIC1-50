@@ -86,6 +86,7 @@ public class GUI extends JFrame {
 	protected JComboBox comboBox = new JComboBox();
 	protected JTextField txtVariableName[];
 	protected JComboBox jmetaltype[];
+	protected JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -134,7 +135,7 @@ public class GUI extends JFrame {
 		scrollpanel.setVisible(false);
 		scrollpanel.getViewport().setOpaque(false);
 		
-		JButton btnNewButton = new JButton("Ok");
+		btnNewButton = new JButton("Ok");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtTypeTheAmmount.setEditable(false);
@@ -321,7 +322,8 @@ public class GUI extends JFrame {
 		if (chooser.showOpenDialog(chooser) == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			System.out.println(file.getName());
-			// codigo para carregar a info para os campos
+			xmlClasses xmlclasses = new xmlClasses();
+			xmlclasses.openXML(file, this);
 	}
 	}
 
