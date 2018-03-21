@@ -78,9 +78,9 @@ import java.io.FileOutputStream;
 public class GUI extends JFrame {
 
 	private JLayeredPane contentPane;
-	protected volatile JTextField nomeproblema;
-	protected volatile JTextField descricao;
-	private volatile JTextField mail;
+	protected JTextField nomeproblema;
+	protected JTextField descricao;
+	private JTextField mail;
 	protected JTextField txtTypeTheAmmount;
 	protected JTextField txtGroupName;
 	protected JComboBox comboBox = new JComboBox();
@@ -106,32 +106,31 @@ public class GUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		txtTypeTheAmmount = new JTextField();
 		txtTypeTheAmmount.setBounds(318, 311, 73, 26);
 		contentPane.add(txtTypeTheAmmount);
 		txtTypeTheAmmount.setColumns(10);
-		
-		final JScrollPane scrollpanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		final JScrollPane scrollpanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpanel.setBounds(448, 92, 291, 336);
 		scrollpanel.setOpaque(false);
 		scrollpanel.setBorder(null);
 		contentPane.add(scrollpanel);
-		
-		
+
 		final JPanel panel_1 = new JPanel();
 		panel_1.setBorder(null);
 		scrollpanel.setViewportView(panel_1);
 		panel_1.setLayout(null);
 		panel_1.setOpaque(false);
-		
-		
+
 		txtGroupName = new JTextField();
 		txtGroupName.setText("Group name");
 		txtGroupName.setBounds(70, 6, 130, 23);
 		panel_1.add(txtGroupName);
-		txtGroupName.setColumns(10);	
-		
+		txtGroupName.setColumns(10);
+
 		scrollpanel.setVisible(false);
 		scrollpanel.getViewport().setOpaque(false);
 		
@@ -143,17 +142,17 @@ public class GUI extends JFrame {
 				txtVariableName = new JTextField[ammount];
 				jmetaltype = new JComboBox[ammount];
 				int aux = 0;
-				for(int i = 0; i<ammount; i++){
+				for (int i = 0; i < ammount; i++) {
 					txtVariableName[i] = new JTextField();
 					txtVariableName[i].setText("Variable name");
 					txtVariableName[i].setBounds(6, 41 + aux, 106, 26);
-					
+
 					jmetaltype[i] = new JComboBox();
-					jmetaltype[i].setModel(new DefaultComboBoxModel(new String[] {"inteiro", "binário", "decimal"}));
+					jmetaltype[i].setModel(new DefaultComboBoxModel(new String[] { "inteiro", "binário", "decimal" }));
 					jmetaltype[i].setToolTipText("");
 					jmetaltype[i].setBounds(115, 41 + aux, 80, 27);
-					
-					aux = aux +30;
+
+					aux = aux + 30;
 					panel_1.add(txtVariableName[i]);
 					panel_1.add(jmetaltype[i]);
 					txtVariableName[i].setColumns(10);
@@ -164,8 +163,7 @@ public class GUI extends JFrame {
 		});
 		btnNewButton.setBounds(385, 314, 46, 23);
 		contentPane.add(btnNewButton);
-		
-		
+
 		JLabel lblAmmountOfProblem = new JLabel("Ammount of problem decision variables:");
 		lblAmmountOfProblem.setForeground(Color.WHITE);
 		lblAmmountOfProblem.setBounds(56, 316, 260, 16);
@@ -177,7 +175,7 @@ public class GUI extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(47, 116, 88, 23);
 		contentPane.add(lblNewLabel);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Time willing to wait:");
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setBounds(56, 270, 135, 16);
@@ -207,11 +205,11 @@ public class GUI extends JFrame {
 		mail.setBounds(137, 210, 216, 26);
 		contentPane.add(mail);
 
-		JButton submit = new JButton("Submit");
+		final JButton submit = new JButton("Submit");
 		submit.setBounds(591, 440, 117, 29);
 		contentPane.add(submit);
-		
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"5", "10", "15", "20", "30", "45", "60"}));
+
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "5", "10", "15", "20", "30", "45", "60" }));
 		comboBox.setToolTipText("");
 		comboBox.setBounds(203, 266, 63, 27);
 		contentPane.add(comboBox);
@@ -230,9 +228,8 @@ public class GUI extends JFrame {
 		open.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				open();
-				}
 			}
-		);
+		});
 		file.add(open);
 
 		final JMenuItem saveas = new JMenuItem("Save as...");
@@ -263,13 +260,14 @@ public class GUI extends JFrame {
 		background.setBounds(0, -50, 990, 620);
 		contentPane.add(background);
 
-		final JPanel panel = new JPanel(new BorderLayout(5, 5));
+		// CODIGO REFERENTE AO PAINEL DE AUTENTICAÇAO DO HELP MAIL
+		final JPanel panelhelp = new JPanel(new BorderLayout(5, 5));
 		JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
 		label.add(new JLabel("E-Mail", SwingConstants.RIGHT));
 		label.add(new JLabel("Password", SwingConstants.RIGHT));
 		label.add(new JLabel("Write your problem", SwingConstants.RIGHT));
 
-		panel.add(label, BorderLayout.WEST);
+		panelhelp.add(label, BorderLayout.WEST);
 
 		JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2));
 		final JTextField username = new JTextField();
@@ -278,15 +276,14 @@ public class GUI extends JFrame {
 		controls.add(password);
 		final JTextField description = new JTextField();
 		controls.add(description);
-		panel.add(controls, BorderLayout.CENTER);
-		
-		
-		//CODIGO REFERENTE AO ENVIO DO MAIL DE HELP
+		panelhelp.add(controls, BorderLayout.CENTER);
+
+		// CODIGO REFERENTE AO ENVIO DO MAIL DE HELP
 		emailhelp.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				UIManager.put("OptionPane.minimumSize", new Dimension(400, 200));
-				int OKclick = JOptionPane.showOptionDialog(emailhelp, panel, "Authentication", JOptionPane.DEFAULT_OPTION,
-						JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				int OKclick = JOptionPane.showOptionDialog(emailhelp, panelhelp, "Authentication",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 				while (true) {
 					if (OKclick == 0) {
 						String userName = username.getText();
@@ -298,16 +295,35 @@ public class GUI extends JFrame {
 				}
 			}
 		});
+		// CODIGO REFERENTE AO PAINEL DE AUTENTICAÇAO DO SUBMIT MAIL
+		final JPanel panelsubmit = new JPanel(new BorderLayout(5, 5));
+		JPanel label1 = new JPanel(new GridLayout(0, 1, 2, 2));
+		label1.add(new JLabel("Password", SwingConstants.RIGHT));
+		panelsubmit.add(label1, BorderLayout.WEST);
+		JPanel controls1 = new JPanel(new GridLayout(0, 1, 2, 2));
+		final JPasswordField password1 = new JPasswordField();
+		controls1.add(password1);
+		panelsubmit.add(controls1, BorderLayout.CENTER);
 
 		// CÓDIGO REFERENTE AO ENVIO DE MAIL QUANDO SUBMIT
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sendMailAfterOptimizing();
+				UIManager.put("OptionPane.minimumSize", new Dimension(400, 200));
+				int OKclick = JOptionPane.showOptionDialog(submit, panelsubmit, "Authentication", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				while (true) {
+					if (OKclick == 0) {
+						String passWord1 = password1.getText();
+						sendMailAfterSubmit(passWord1);
+						break;
+					}
+				}
 			}
+
 		});
 	}
 
-		// CODIGO REFERENTE AO SAVE AS
+	// CODIGO REFERENTE AO SAVE AS
 	public void save() {
 		String sb = "TEST CONTENT"; // meter aqui a info dos campos
 		JFileChooser chooser = new JFileChooser();
@@ -317,23 +333,24 @@ public class GUI extends JFrame {
 			CreateXML(chooser.getSelectedFile());
 		}
 	}
-	public void open(){
+
+	public void open() {
 		JFileChooser chooser = new JFileChooser();
 		if (chooser.showOpenDialog(chooser) == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			System.out.println(file.getName());
 			xmlClasses xmlclasses = new xmlClasses();
 			xmlclasses.openXML(file, this);
-	}
-	}
+		}
+		}
 
-		//CÓDIGO REFERENTE AO ENVIO DE MENSAGEM AO SUPORTE
+	// CÓDIGO REFERENTE AO ENVIO DE MENSAGEM AO SUPORTE
 	public void sendSupportMail(String userName, String passWord, String descriptiontext) {
 		try {
 			String host = "smtp.gmail.com";
 			String user = userName;
 			String pass = passWord;
-			String to = "jfbromao97@gmail.com";
+			String to = "jpmrd1@iscte-iul.pt";
 			String from = userName;
 			String subject = "Help with software.";
 			String messageText = descriptiontext;
@@ -368,95 +385,21 @@ public class GUI extends JFrame {
 		}
 	}
 
-		//CÓDIGO REFERENTE AO SUMBIT
-	public void sendSubmitMail(String userName, String passWord, String descriptiontext) {
-		try {
-			String host = "smtp.gmail.com";
-			String user = userName;
-			String pass = passWord;
-			String to = "jpmrd1@iscte-iul.com";
-			String from = userName;
-			String subject = "TITULO"; //METER AQUI O TITULO COMO ESTA PEDIDO NO PROJETO
-			String messageText = descriptiontext; //SAME OF ABOVE
-			boolean sessionDebug = false;
-
-			Properties props = System.getProperties();
-
-			props.put("mail.smtp.starttls.enable", "true");
-			props.put("mail.smtp.host", host);
-			props.put("mail.smtp.port", "587");
-			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.starttls.required", "true");
-
-			Session mailSession = Session.getDefaultInstance(props, null);
-			mailSession.setDebug(sessionDebug);
-			Message msg = new MimeMessage(mailSession);
-			msg.setFrom(new InternetAddress(from));
-			InternetAddress[] address = { new InternetAddress(to) };
-			msg.setRecipients(Message.RecipientType.TO, address);
-			msg.setSubject(subject);
-			msg.setSentDate(new Date());
-			msg.setText(messageText);
-
-			Transport transport = mailSession.getTransport("smtp");
-			transport.connect(host, user, pass);
-			transport.sendMessage(msg, msg.getAllRecipients());
-			transport.close();
-			System.out.println("message send successfully");
-			
-
-		} catch (
-
-		Exception ex) {
-			System.out.println(ex);
-		}
-	}
-	
-	//codigo referente ao save de um xml
-	
-	public void CreateXML(File file){
-		try {
-			xmlClasses xmlclasses = new xmlClasses();
-			Document document= xmlClasses.createXML(this);
-			xmlClasses.saveXML(document, file);
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void CreateXMLhere(){
-		try {
-			xmlClasses xmlclasses = new xmlClasses();
-			Document document= xmlClasses.createXML(this);
-			xmlClasses.saveXMLhere(document);
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public String getTitle(){
-		return nomeproblema.getText();
-	}
-	
-
-
-	public void sendMailAfterOptimizing() {
+	// CÓDIGO REFERENTE AO SUMBIT
+	public void sendMailAfterSubmit(String passWord) {
 		try {
 			String host = "smtp.gmail.com";
 			String user = mail.getText();
-			String pass = "8errofatal";
-			String to = "nuclearrrrr@gmail.com";
+			String pass = passWord;
+			String to = "jpmrd1@iscte-iul.pt";
 			String from = mail.getText();
 			String time = LocalDateTime.now().toString();
-			String subject = "Otimização em curso: " + nomeproblema.getText() + " " + time; // METER AQUI O TITULO COMO
-																							// ESTA PEDIDO NO PROJETO
+			String subject = "Otimização em curso: " + nomeproblema.getText() + " " + time;
 			String messageText = "Muito obrigado por usar esta plataforma de otimização. Será informado por email sobre o progresso do processo de otimização, quando o processo de otimização tiver atingido 25%, 50%,75% do total do (número de avaliações ou) tempo estimado, e também quando o processo estiver terminado, com sucesso ou devido à ocorrência de erros.";
 			boolean sessionDebug = false;
 
 			Properties props = System.getProperties();
-			
+
 			props.put("mail.smtp.starttls.enable", "true");
 			props.put("mail.smtp.host", host);
 			props.put("mail.smtp.auth", "true");
@@ -477,20 +420,18 @@ public class GUI extends JFrame {
 
 			MimeBodyPart attachmentBodyPart = new MimeBodyPart();
 
-			
-			
-			//ENVIAR XML POR MAIL
+			// ENVIAR XML POR MAIL
 			CreateXMLhere();
-			File file = new File("problems.xml"); 
+			File file = new File("problems.xml");
 			DataSource source = new FileDataSource(file.getAbsolutePath());
 			attachmentBodyPart.setDataHandler(new DataHandler(source));
 			attachmentBodyPart.setFileName("problems.xml"); // ex : "test.pdf"
 
-			//multipart.addBodyPart(textBodyPart); // add the text part
-			multipart.addBodyPart(attachmentBodyPart); // add the attachement part
+			// multipart.addBodyPart(textBodyPart); // add the text part
+			multipart.addBodyPart(attachmentBodyPart); // add the attachement
+														// part
 
 			msg.setContent(multipart);
-			
 
 			Transport transport = mailSession.getTransport("smtp");
 			transport.connect(host, user, pass);
@@ -501,7 +442,36 @@ public class GUI extends JFrame {
 		} catch (
 
 		Exception ex) {
-			System.out.println(ex);
+			JOptionPane.showMessageDialog(null, "User or password is invalid!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+	}
+
+	// codigo referente ao save de um xml
+
+	public void CreateXML(File file) {
+		try {
+			xmlClasses xmlclasses = new xmlClasses();
+			Document document = xmlClasses.createXML(this);
+			xmlClasses.saveXML(document, file);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
+
+	public void CreateXMLhere() {
+		try {
+			xmlClasses xmlclasses = new xmlClasses();
+			Document document = xmlClasses.createXML(this);
+			xmlClasses.saveXMLhere(document);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String getTitle() {
+		return nomeproblema.getText();
+	}
+
 }
