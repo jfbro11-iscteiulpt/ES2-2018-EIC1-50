@@ -11,7 +11,7 @@ public class Main {
     		EventQueue.invokeLater(new Runnable() {
     			public void run() {
     				try {
-    					gui frame = new gui();
+    					GUI frame = new GUI();
     					frame.setVisible(true);
     				} catch (Exception e) {
     					e.printStackTrace();

@@ -7,13 +7,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.Element;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+
 import java.awt.Color;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.SwingConstants;
@@ -41,6 +53,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
+import java.time.ZonedDateTime;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
@@ -57,16 +70,19 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.BoxLayout;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import java.io.FileOutputStream;
 
-public class gui extends JFrame {
+public class GUI extends JFrame {
 
 	private JLayeredPane contentPane;
-	private volatile JTextField nomeproblema;
-	private volatile JTextField descricao;
+	protected volatile JTextField nomeproblema;
+	protected volatile JTextField descricao;
 	private volatile JTextField mail;
-	private JTextField txtTypeTheAmmount;
-	private JTextField txtGroupName;
-	private JTextField txtVariableName;
+	protected JTextField txtTypeTheAmmount;
+	protected JTextField txtGroupName;
+	protected JComboBox comboBox = new JComboBox();
+	protected JTextField txtVariableName[];
+	protected JComboBox jmetaltype[];
 
 	/**
 	 * Launch the application.
@@ -76,8 +92,8 @@ public class gui extends JFrame {
 	 * Create the frame.
 	 */
 	@SuppressWarnings("deprecation")
-	public gui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(gui.class.getResource("/images/background.png")));
+	public GUI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("/images/background.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 745, 505);
 		contentPane = new JLayeredPane();
@@ -93,7 +109,7 @@ public class gui extends JFrame {
 		txtTypeTheAmmount.setColumns(10);
 		
 		final JScrollPane scrollpanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpanel.setBounds(448, 83, 291, 366);
+		scrollpanel.setBounds(448, 92, 291, 336);
 		scrollpanel.setOpaque(false);
 		scrollpanel.setBorder(null);
 		contentPane.add(scrollpanel);
@@ -120,8 +136,8 @@ public class gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				txtTypeTheAmmount.setEditable(false);
 				int ammount = Integer.valueOf(txtTypeTheAmmount.getText());
-				JTextField txtVariableName[] = new JTextField[ammount];
-				JComboBox jmetaltype[] = new JComboBox[ammount];
+				txtVariableName = new JTextField[ammount];
+				jmetaltype = new JComboBox[ammount];
 				int aux = 0;
 				for(int i = 0; i<ammount; i++){
 					txtVariableName[i] = new JTextField();
@@ -175,7 +191,7 @@ public class gui extends JFrame {
 		descricao.setHorizontalAlignment(SwingConstants.LEFT);
 		descricao.setBackground(new Color(255, 255, 255));
 		descricao.setText("  Write a small description");
-		descricao.setBounds(137, 155, 294, 66);
+		descricao.setBounds(137, 143, 294, 66);
 		contentPane.add(descricao);
 		descricao.setColumns(10);
 
@@ -184,14 +200,13 @@ public class gui extends JFrame {
 		mail.setHorizontalAlignment(SwingConstants.LEFT);
 		mail.setColumns(10);
 		mail.setBackground(new Color(255, 255, 255));
-		mail.setBounds(137, 221, 216, 26);
+		mail.setBounds(137, 210, 216, 26);
 		contentPane.add(mail);
 
 		JButton submit = new JButton("Submit");
-		submit.setBounds(628, 448, 117, 29);
+		submit.setBounds(591, 440, 117, 29);
 		contentPane.add(submit);
 		
-		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"5", "10", "15", "20", "30", "45", "60"}));
 		comboBox.setToolTipText("");
 		comboBox.setBounds(203, 266, 63, 27);
@@ -240,7 +255,7 @@ public class gui extends JFrame {
 		help.add(emailhelp);
 
 		JLabel background = new JLabel("New label");
-		background.setIcon(new ImageIcon(gui.class.getResource("/images/background.png")));
+		background.setIcon(new ImageIcon(GUI.class.getResource("/images/background.png")));
 		background.setBounds(0, -50, 990, 620);
 		contentPane.add(background);
 
@@ -293,15 +308,9 @@ public class gui extends JFrame {
 		String sb = "TEST CONTENT"; // meter aqui a info dos campos
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File("/home/me/Documents"));
-		int retrival = chooser.showSaveDialog(null);
-		if (retrival == JFileChooser.APPROVE_OPTION) {
-			try {
-				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".xml");
-				fw.write(sb);
-				fw.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+			CreateXML(chooser.getSelectedFile());
 		}
 	}
 	public void open(){
@@ -383,6 +392,82 @@ public class gui extends JFrame {
 			msg.setSubject(subject);
 			msg.setSentDate(new Date());
 			msg.setText(messageText);
+
+			Transport transport = mailSession.getTransport("smtp");
+			transport.connect(host, user, pass);
+			transport.sendMessage(msg, msg.getAllRecipients());
+			transport.close();
+			System.out.println("message send successfully");
+			
+
+		} catch (
+
+		Exception ex) {
+			System.out.println(ex);
+		}
+	}
+	
+	//codigo referente ao save de um xml
+	
+	public void CreateXML(File file){
+		  xmlClasses xmlclasses = new xmlClasses();
+		  xmlclasses.createXML(this, file);
+	}
+	
+	public String getTitle(){
+		return nomeproblema.getText();
+	}
+	
+
+
+	public void sendMailAfterOptimizing() {
+		try {
+			String host = "smtp.gmail.com";
+			String user = mail.getText();
+			String pass = "8errofatal";
+			String to = "nuclearrrrr@gmail.com";
+			String from = mail.getText();
+			String time = ZonedDateTime.now().toString();
+			String subject = "Otimização em curso: " + nomeproblema.getText() + " " + time; // METER AQUI O TITULO COMO
+																							// ESTA PEDIDO NO PROJETO
+			String messageText = "Muito obrigado por usar esta plataforma de otimização. Será informado por email sobre o progresso do processo de otimização, quando o processo de otimização tiver atingido 25%, 50%,75% do total do (número de avaliações ou) tempo estimado, e também quando o processo estiver terminado, com sucesso ou devido à ocorrência de erros.";
+			boolean sessionDebug = false;
+
+			Properties props = System.getProperties();
+			
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", host);
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.required", "true");
+
+			Session mailSession = Session.getDefaultInstance(props, null);
+
+			mailSession.setDebug(sessionDebug);
+			Message msg = new MimeMessage(mailSession);
+			msg.setFrom(new InternetAddress(from));
+			InternetAddress[] address = { new InternetAddress(to) };
+			msg.setRecipients(Message.RecipientType.TO, address);
+			msg.setSubject(subject);
+			msg.setSentDate(new Date());
+			msg.setText(messageText);
+
+			Multipart multipart = new MimeMultipart();
+
+			MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+
+			
+			
+			//ENVIAR XML POR MAIL
+			File file = new File("pom.xml"); 
+			DataSource source = new FileDataSource(file.getAbsolutePath());
+			attachmentBodyPart.setDataHandler(new DataHandler(source));
+			attachmentBodyPart.setFileName("pom"); // ex : "test.pdf"
+
+			//multipart.addBodyPart(textBodyPart); // add the text part
+			multipart.addBodyPart(attachmentBodyPart); // add the attachement part
+
+			msg.setContent(multipart);
+			
 
 			Transport transport = mailSession.getTransport("smtp");
 			transport.connect(host, user, pass);
