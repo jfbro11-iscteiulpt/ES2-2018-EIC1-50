@@ -85,8 +85,9 @@ public class GUI extends JFrame {
 	protected JTextField txtGroupName;
 	protected JComboBox comboBox = new JComboBox();
 	protected JTextField txtVariableName[];
-	protected JComboBox jmetaltype[];
+	//protected JComboBox jmetaltype[];
 	protected JButton btnNewButton;
+	protected JComboBox typebox = new JComboBox();
 
 	/**
 	 * Launch the application.
@@ -126,9 +127,13 @@ public class GUI extends JFrame {
 		panel_1.setOpaque(false);
 
 		txtGroupName = new JTextField();
+		typebox.setModel(new DefaultComboBoxModel(new String[] { "inteiro", "binário", "double" }));
+		typebox.setToolTipText("");
+		typebox.setBounds(115, 6, 100, 27);
 		txtGroupName.setText("Group name");
-		txtGroupName.setBounds(70, 6, 130, 23);
+		txtGroupName.setBounds(6, 6, 106, 26);
 		panel_1.add(txtGroupName);
+		panel_1.add(typebox);
 		txtGroupName.setColumns(10);
 
 		scrollpanel.setVisible(false);
@@ -140,21 +145,21 @@ public class GUI extends JFrame {
 				txtTypeTheAmmount.setEditable(false);
 				int ammount = Integer.valueOf(txtTypeTheAmmount.getText());
 				txtVariableName = new JTextField[ammount];
-				jmetaltype = new JComboBox[ammount];
+//				jmetaltype = new JComboBox[ammount];
 				int aux = 0;
 				for (int i = 0; i < ammount; i++) {
 					txtVariableName[i] = new JTextField();
 					txtVariableName[i].setText("Variable name");
 					txtVariableName[i].setBounds(6, 41 + aux, 106, 26);
 
-					jmetaltype[i] = new JComboBox();
-					jmetaltype[i].setModel(new DefaultComboBoxModel(new String[] { "inteiro", "binário", "decimal" }));
-					jmetaltype[i].setToolTipText("");
-					jmetaltype[i].setBounds(115, 41 + aux, 80, 27);
+//					jmetaltype[i] = new JComboBox();
+//					jmetaltype[i].setModel(new DefaultComboBoxModel(new String[] { "inteiro", "binário", "decimal" }));
+//					jmetaltype[i].setToolTipText("");
+//					jmetaltype[i].setBounds(115, 41 + aux, 80, 27);
 
 					aux = aux + 30;
 					panel_1.add(txtVariableName[i]);
-					panel_1.add(jmetaltype[i]);
+//					panel_1.add(jmetaltype[i]);
 					txtVariableName[i].setColumns(10);
 				}
 				panel_1.setPreferredSize(new Dimension(290, 40 + aux));
@@ -211,7 +216,7 @@ public class GUI extends JFrame {
 
 		comboBox.setModel(new DefaultComboBoxModel(new String[] { "5", "10", "15", "20", "30", "45", "60" }));
 		comboBox.setToolTipText("");
-		comboBox.setBounds(203, 266, 63, 27);
+		comboBox.setBounds(203, 266, 70, 27);
 		contentPane.add(comboBox);
 
 		JMenuBar menuBar_1 = new JMenuBar();
