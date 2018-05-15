@@ -52,6 +52,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.sql.Time;
@@ -74,6 +75,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 
 public class GUI extends JFrame {
 
@@ -407,6 +409,7 @@ public class GUI extends JFrame {
 
 			props.put("mail.smtp.starttls.enable", "true");
 			props.put("mail.smtp.host", host);
+			props.put("mail.smtp.port", "587");
 			props.put("mail.smtp.auth", "true");
 			props.put("mail.smtp.starttls.required", "true");
 
@@ -439,7 +442,9 @@ public class GUI extends JFrame {
 			msg.setContent(multipart);
 
 			Transport transport = mailSession.getTransport("smtp");
+			System.out.println(user);
 			transport.connect(host, user, pass);
+			System.out.println("still working");
 			transport.sendMessage(msg, msg.getAllRecipients());
 			transport.close();
 			System.out.println("message send successfully");
